@@ -50,13 +50,13 @@ def get_schema(schema_path=schema_path):
 def validate_input(dict_request):
     def _validate_cols(col):
         schema = get_schema()
-        actual_cols = schema.keys
+        actual_cols = schema.keys()
         if col not in actual_cols:
             raise NotInCols
 
     def _validate_values(col, val):
         schema= get_schema()
-        if not(schema[col]["min"] <= float(dict_request[col]) <= (schema[col]["max"])):
+        if not(schema[col]["min"] <= float(dict_request[col]) <= schema[col]["max"]):
             raise NotInRange
 
     for col, val in dict_request.items():
@@ -79,6 +79,14 @@ def api_response(dict_request):
             response = {"response":response}
             return response
   
+    # except NotInRange as e:
+    #     response = {"the_expected_range": get_schema(), "response": str(e) }
+    #     return response
+
+    # except NotInCols as e:
+    #     response = {"the_expected_cols": get_schema().keys(), "response": str(e) }
+        # return response
+
     except Exception as e:
-        response = {"the_excepted_range": get_schema(), "response":str(e)}
+        response = {"the_expected_range": get_schema(), "response": str(e) }
         return response
